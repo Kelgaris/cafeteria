@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.cafeteria.CafeController"
+            stylesheets="@style.css"
+            prefWidth="700" prefHeight="500">
+
+    <top>
+        <Label text="☕ Simulación de Cafetería"
+               styleClass="titulo"
+               BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true">
+            <VBox fx:id="contenedorCamareros" spacing="10">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="center" spacing="15">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Iniciar Simulación" onAction="#iniciarSimulacion" styleClass="boton"/>
+            <Button text="Limpiar" onAction="#limpiar" styleClass="botonSecundario"/>
+        </HBox>
+
+    </bottom>
+</BorderPane>

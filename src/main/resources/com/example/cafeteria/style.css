@@ -1,0 +1,51 @@
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #f9f9f9, #ececec);
+    -fx-font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.titulo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 15 0 10 0;
+}
+
+.boton {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 10;
+}
+.boton:hover {
+    -fx-background-color: #45a049;
+}
+
+.botonSecundario {
+    -fx-background-color: #607d8b;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 10;
+}
+.botonSecundario:hover {
+    -fx-background-color: #546e7a;
+}
+
+.tarjeta {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 10;
+}
+
+.nombreCamarero {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.estado {
+    -fx-text-fill: #555;
+    -fx-font-size: 13px;
+}
