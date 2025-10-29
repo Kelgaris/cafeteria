@@ -1,0 +1,115 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Nuestra Cafetería}
+\author{David Priego Puga}
+
+\begin{document}
+\maketitle
+
+
+\section{Introducción}
+
+En este proyecto pequeño donde seguiremos aprendiendo a trabajar con \textbf{hilos} en \textbf{java} tenemos que construir una \textbf{cafetería} con camareros y clientes. Donde nuestros camareros tendrán que atender a los diferentes que lleguen a la \textbf{cafetería}. Los clientes por otro lado cuando llegan a nuestro local tienen un tiempo de espera el cual es aleatorio (Esto está hecho de esta manera para darle un añadido de aleatoriedad y comprobar que los hilos funcionan bien debido a que cada ejecución del programa es completamente aleatoria). Lo único que no es aleatorio es el orden de llegada de los clientes y los camareros.
+
+Por otro lado volviendo a los clientes, estos pueden llegar a la cafetería, ser atendidos dentro de su \textbf{tiempo de espera} e irse con el café, por otro lado pueden llegar a la cafetería, ser atendidos pero que el camarero tarde demasiado en servirles entonces se irán enfadados y sin café y por último es que directamente llegue a la cafetería y pase el tiempo y los camareros no lleguen a atender a este cliente de tal manera que no le dará tiempo ni a pedir un café. Esto en resumidas cuentas es el resumen de nuestro programa.
+
+\section{Arquitectura de nuestro programa}
+
+Nuestro programa se basa en un código realizado en java de tal manera que que dispondremos de \textbf{3 clases diferentes}: \textbf{Camarero}, \textbf{Cliente} y \textbf{Main}. De tal manera que solo con estas clases se consiga la completa gestión de la cafetería. 
+
+Además como es un programa sencillo no disponemos de backend ya que usamos una \textbf{Lista} de clientes embebida dentro de nuestro \textbf{JavaFX}. 
+
+\subsection{Clase Cliente}
+
+En esta clase definimos a cada uno de nuestros clientes. Tenemos dos atributos para cada uno de nuestros \textbf{clientes}, cada cliente tiene \textbf{nombre} y \textbf{tiempo de espera}.
+
+\begin{itemize}
+    \item Nombre: Atributo \textbf{String} que indica como se llama el cliente.
+    \item TiempoEspera: Atributo \textbf{Int} el cual se calcula mediante un \textbf{Math.random} el cual calcula un tiempo aleatorio entre 3 y 4 segundos.
+\end{itemize}
+
+Por otro lado tenemos los diferentes \textbf{getters} para cada cliente de tal manera que tenemos:
+
+\begin{itemize}
+    \item getNombre: Método que nos devuelve el nombre del cliente,
+    \item getTiempoEspera: Método que nos devuelve el \textbf{TiempoEspera} en un formato \textbf{Int}. 
+\end{itemize}
+
+Con esto podemos ver que realmente la clase \textbf{Cliente} es una clase sencilla que lo único que hace es guardar los datos mínimos para que el programa tenga sentido en relación al cliente.
+
+\subsection{Clase Camarero}
+
+En esta clase definiremos a cada uno de los posibles camareros que tenga la cafetería pero además de que  realmente quien realiza todo el \textbf{"trabajo"} es la clase \textbf{Camarero} ya que como hemos visto antes, cliente solo manda los datos mínimos imprescindibles.
+
+En caso de los camareros tenemos bastantes más atributos y métodos.
+
+Los atributos de la clase \textbf{Camarero} son:
+
+\begin{itemize}
+    \item \textbf{String} \textbf{nombre}: De la misma manera que un cliente tiene un nombre en este caso tenemos un nombre para cada uno de los camareros.
+    \item \textbf{Cliente[] clientes}: La propia lista de \textbf{clientes} se pasa como atributo para la clase camarero de tal manera que así sabe cada camarero cuantos clientes tiene. Podrían ser listas separadas pero para este \textbf{proyecto} usaremos la misma lista para todos los camareros.
+    \item \textbf{Int indice}: Este número se encargara de marcar el progreso en un \textbf{método} posterior llamado \textbf{siguienteCliente} de tal manera que el \textbf{indice} marca el número en la lista del cliente actual. Por ejemplo el cliente con indice 0 es el cliente en posición 0 del Array por lo tanto el primero.
+    \item \textbf{Object lock:} Es un objeto candado que usamos en el método \textbf{"siguienteCliente"} de tal manera que se usa como \textbf{bloqueo} debido a que los dos camareros interactúan con la misma lista esto hace que cuando un camarero está trabajando con la lista y aumentando el indice, el \textbf{lock} prohíbe al resto de camareros entrar en la lista de clientes y modificar el \textbf{indice}.
+    \item \textbf{VBox contenedorMensajes:} Contenedor de cada camarero donde vamos a imprimir cada uno de los mensajes que se generan en nuestro programa de tal manera que sabemos a que camarero pertenece cada uno de los mensajes de cada cliente.
+\end{itemize}
+
+Con esto tenemos todos los atributos que dispone cada uno de los camareros, como podemos ver son un par más que los que dispone la clase cliente pero sobretodo el peso que estos tienen a la hora de ejecutar el programa.
+
+Pero bueno ahora hablaremos de los diferentes métodos que dispone la clase \textbf{Camarero}: 
+
+\begin{itemize}
+    \item \textbf{siguienteCliente}: Método que sirve para moverse a través de la lista de clientes de tal manera que solo un \textbf{camarero} puede estar a la vez, esto se hace para evitar que ambos camareros atiendan al mismo cliente, para lograr esto se hace una comprobación de indices, primero de todo, se bloquea el acceso de otro camarero con \textbf{synchronized (lock)}, luego se comprueba que el indice actual sea menor que la longitud de la lista de clientes.  Se recoge el cliente en posición = indice, el indice crece en una unidad y se devuelve el cliente. De tal manera que el primer camarero accederá al cliente en posición cero (Es decir al primer cliente) y el segundo camarero cuando entre al método \textbf{siguienteCliente} entrará cuando \textbf{indice} sea ya uno por lo que accederá al segundo cliente.
+    \item \textbf{mostrarMensaje}: Método que se encarga de imprimir en pantalla los diferentes mensajes que se generan a la hora de atender a los clientes, debido a que en \textbf{JavaFX} tenemos un contenedor para cada camarero y ahí imprimimos dichos mensajes.
+    \item \textbf{prepararCafe:} Este método se encarga de la gestión de los clientes y de comprobar si han sido atendidos a tiempo por el camarero para ello, se encarga de mostrar diferentes mensajes conforme el \textbf{cliente} es atendido en tiempo, si ha recibido su café o directamente se ha ido sin ni si quiera ser atendido. Para ello trabajamos con el \textbf{tiempoEspera} y el \textbf{tiempoPreparación} el cual no deja de ser otro tiempo random que ronda entre los 4 y los 5 segundos de tal manera que el camarero puede llegar a fallar el tiempo de espera de los clientes.
+    \item Tenemos por último una comprobación de cliente, si cliente es igual a \textbf{siguienteCliente} pero es distinto a \textbf{null} entonces llamaremos a \textbf{prepararCafe} si no se da esta condición implica que la lista de clientes se terminó por lo que mostramos un mensaje donde se indica que el \textbf{camarero terminó el turno.}
+\end{itemize}
+
+
+
+\subsection{Clase CafeController}
+
+Está clase en \textbf{JavaFX} es la que substituye a la clase \textbf{Main} en nuestro programa en \textbf{Java}.  Pero de base lo que tenemos en este archivo es:
+
+\begin{itemize}
+    \item El \textbf{VBox} que nos los contenedores para cada uno de nuestro contenedores.
+\end{itemize}
+
+Aparte tenemos 3 métodos:
+
+\begin{itemize}
+    \item \textbf{iniciarSimulación}:  Método donde tenemos definido nuestro array de \textbf{clientes}, además creamos las tarjetas para cada uno de los camareros que queramos crear, en este caso tenemos 2 camareros creados.
+    \item \textbf{crearTarjeta:}  Método que crea el contenedor para la tarjeta de cada uno de los camareros.
+    \begin{itemize}
+        \item Contendedor Tarjeta \textbf{VBox}
+        \item Label con el nombre del camarero.
+        \item Contenedor \textbf{VBox} que es el contenedor de los diferentes mensajes.
+        \item Luego a \textbf{Tarjeta} añadimos el label del nombre del camarero y el contenedor de mensajes
+        \item Por último creamos el camarero con su constructor y iniciamos el \textbf{hilo}.
+    \end{itemize}
+\end{itemize}
+
+
+\section{Complicaciones}
+
+Para crear el programa en \textbf{JavaFx} desde los archivos básicos de java en \textbf{Intellij IDEA}  tuve que usar \textbf{Platform} debido a que \textbf{JavaFX} solo dispone de un \textbf{Hilo} para mantener la coherencia y evitar que dos hilos distintos modifiquen la interfaz de tal manera que está se rompa, por lo tanto directamente tenemos que usarlo para marca a la interfaz un \textbf{"orden de turnos"} para que cada hilo espere a que acabe de actuar el hilo actual en funcionamiento.
+
+
+
+
+
+
+
+\end{document}
