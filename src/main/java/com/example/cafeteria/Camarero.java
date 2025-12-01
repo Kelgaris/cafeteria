@@ -10,10 +10,12 @@ public class Camarero extends Thread {
     private static int indice = 0;
     private static final Object lock = new Object();
     private VBox contenedorMensajes;
+    private Buffer buffer;
 
-    public Camarero(String nombre, Cliente[] listaClientes, VBox contenedorMensajes) {
+    public Camarero(String nombre, Cliente[] listaClientes, VBox contenedorMensajes, Buffer buffer) {
         this.nombre = nombre;
         this.contenedorMensajes = contenedorMensajes;
+        this.buffer = buffer;
         if (Camarero.clientes == null) {
             Camarero.clientes = listaClientes;
         }
@@ -41,19 +43,13 @@ public class Camarero extends Thread {
 
     private void prepararCafe(Cliente cliente) {
         try {
-            int tiempoPreparacion = (int) (Math.random() * 4000 + 1000);
+            mostrarMensaje("👤 Cliente " + cliente.getNombre() + " llegó");
+            mostrarMensaje("👨‍🍳 Camarero " + nombre + " atiende a " + cliente.getNombre());
+            mostrarMensaje("⏳ " + nombre + " esperando un café del barista…");
 
-            mostrarMensaje("Cliente: " + cliente.getNombre() + " llegó al restaurante");
-            mostrarMensaje("Camarero " + nombre + " atiende a " + cliente.getNombre());
+            String cafe = buffer.consumir();
 
-            Thread.sleep(tiempoPreparacion);
-
-            if (tiempoPreparacion > cliente.getTiempoEspera()) {
-                mostrarMensaje("😞 " + cliente.getNombre() + " se fue sin esperar");
-            } else {
-                mostrarMensaje("✅ " + cliente.getNombre() + " recibió su café en " +
-                        (tiempoPreparacion / 1000.0) + " segundos");
-            }
+            mostrarMensaje("☕ " + nombre + " entregó " + cafe + " a " + cliente.getNombre());
 
         } catch (InterruptedException e) {
             mostrarMensaje("⚠️ " + cliente.getNombre() + " se fue sin ser atendido");

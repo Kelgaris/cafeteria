@@ -9,12 +9,27 @@ import javafx.scene.layout.HBox;
 
 public class CafeController {
 
+    private Barista barista;
+    private Buffer buffer;
+    private VBox mensajesBarista;
+
+
     @FXML
-    private VBox contenedorCamareros;
+    private VBox contenedorBarista;
+    @FXML
+    private HBox contenedorCamareros;
 
     @FXML
     public void iniciarSimulacion() {
         contenedorCamareros.getChildren().clear();
+        contenedorBarista.getChildren().clear();
+
+        buffer = new Buffer(1);
+
+        crearTarjetaBarista();
+
+        barista = new Barista(buffer, mensajesBarista);
+        barista.start();
 
         Cliente[] clientes = {
                 new Cliente("David"), new Cliente("Marta"),
@@ -41,11 +56,24 @@ public class CafeController {
         contenedorCamareros.getChildren().add(tarjeta);
 
 
-        Camarero camarero = new Camarero(nombreCamarero, clientes, contenedorMensajes);
+        Camarero camarero = new Camarero(nombreCamarero, clientes, contenedorMensajes, buffer);
         camarero.start();
     }
 
 
+    private void crearTarjetaBarista(){
+        VBox tarjeta = new VBox(5);
+        tarjeta.getStyleClass().add("tarjeta");
+
+        Label lblNombre = new Label("☕ Barista");
+        lblNombre.getStyleClass().add("NombreCamarero");
+
+        mensajesBarista = new VBox(3);
+        mensajesBarista.getStyleClass().add("contenedorMensajes");
+
+        tarjeta.getChildren().addAll(lblNombre,mensajesBarista);
+        contenedorBarista.getChildren().add(tarjeta);
+    }
 
 
     @FXML

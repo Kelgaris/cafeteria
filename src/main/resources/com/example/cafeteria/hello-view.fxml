@@ -17,14 +17,23 @@
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true">
-            <VBox fx:id="contenedorCamareros" spacing="10">
+        <HBox spacing="15">
+            <VBox fx:id="contenedorBarista" spacing="10">
                 <padding>
-                    <Insets top="15" right="15" bottom="15" left="15"/>
+                    <Insets top="15" right="15" bottom="0" left="15"/>
                 </padding>
             </VBox>
-        </ScrollPane>
+
+            <ScrollPane fitToWidth="true">
+                <HBox fx:id="contenedorCamareros" spacing="10">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                </HBox>
+            </ScrollPane>
+        </HBox>
     </center>
+
 
     <bottom>
         <HBox alignment="center" spacing="15">
